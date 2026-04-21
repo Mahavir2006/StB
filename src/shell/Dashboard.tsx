@@ -72,10 +72,10 @@ export function Dashboard() {
               className="absolute inset-0 w-full h-full pointer-events-none z-0"
               background="transparent"
               particleColor="#a78bfa"
-              particleDensity={60}
-              minSize={0.4}
-              maxSize={1.2}
-              speed={0.8}
+              particleDensity={35}
+              minSize={0.3}
+              maxSize={0.9}
+              speed={0.5}
             />
           </Suspense>
         )}

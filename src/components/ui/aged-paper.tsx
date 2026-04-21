@@ -238,7 +238,7 @@ export function AgedPaper({ className = '' }: AgedPaperProps) {
     if (!container) return;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     container.appendChild(renderer.domElement);
 
     const scene  = new THREE.Scene();
