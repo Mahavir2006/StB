@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display:   "Clash Display", sans-serif;
+  --font-ui:        "Inter", sans-serif;
+  --font-emotional: "Cormorant Garamond", serif;
+  --font-mono:      "JetBrains Mono", monospace;
+
+  --color-accent-purple-start: #a78bfa;
+  --color-accent-purple-end:   #7c3aed;
+  --color-accent-blue-start:   #38bdf8;
+  --color-accent-blue-end:     #0ea5e9;
+  --color-accent-pink-start:   #f472b6;
+  --color-accent-pink-end:     #ec4899;
+}
+
+@layer base {
+
+  :root {
+    --bg-color:             #FF9A86;
+    --surface-color:        #FFF0BE;
+    --surface-raised-color: #FFD6A6;
+    --border-color:         rgba(45,18,0,0.18);
+    --canvas-bg:            #FF9A86;
+    --text-primary:         #2D1200;
+    --text-secondary:       #7A3D1A;
+    --glass-bg:             rgba(255,240,190,0.95);
+    --glass-border:         rgba(45,18,0,0.14);
+    --glass-shadow:         0 2px 12px rgba(45,18,0,0.10);
+    --accent-primary-start:   #c0392b;
+    --accent-primary-end:     #a93226;
+    --accent-secondary-start: #e67e22;
+    --accent-secondary-end:   #d35400;
+    --accent-highlight:       #FF9A86;
+    --sidebar-bg:             #FFB399;
+    --sidebar-border:         rgba(45,18,0,0.14);
+    --topbar-bg:              #FFD6A6;
+    --topbar-border:          rgba(45,18,0,0.14);
+    --scrollbar-color:        #c0392b;
+  }
+
+  :root.dark {
+    --bg-color:             #050508;
+    --surface-color:        #0d0d14;
+    --surface-raised-color: #141420;
+    --border-color:         rgba(255,255,255,0.06);
+    --canvas-bg:            transparent;
+    --text-primary:         #f0f0ff;
+    --text-secondary:       #8888aa;
+    --glass-bg:             rgba(20,20,32,0.92);
+    --glass-border:         rgba(255,255,255,0.07);
+    --glass-shadow:         0 4px 20px rgba(0,0,0,0.35);
+    --accent-primary-start:   #a78bfa;
+    --accent-primary-end:     #7c3aed;
+    --accent-secondary-start: #38bdf8;
+    --accent-secondary-end:   #0ea5e9;
+    --accent-highlight:       #f472b6;
+    --sidebar-bg:             #0d0d14;
+    --sidebar-border:         rgba(255,255,255,0.06);
+    --topbar-bg:              #0d0d14;
+    --topbar-border:          rgba(255,255,255,0.06);
+    --scrollbar-color:        #a78bfa;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    transition: background-color 300ms ease, color 300ms ease;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
+}
+
+@layer utilities {
+
+  /*
+   * GLASSMORPHISM — NO backdrop-filter anywhere.
+   * backdrop-filter forces a repaint of everything behind the element
+   * on every scroll frame. We use a high-opacity solid bg instead.
+   * Visually indistinguishable at 92%+ opacity, zero scroll cost.
+   */
+  .glassmorphism {
+    background: var(--glass-bg);
+    border: 0.5px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    /* Promote to own compositing layer so it doesn't repaint with scroll */
+    transform: translateZ(0);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, var(--accent-primary-start), var(--accent-secondary-start));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .font-display   { font-family: var(--font-display); }
+  .font-ui        { font-family: var(--font-ui); }
+  .font-emotional { font-family: var(--font-emotional); }
+  .font-mono      { font-family: var(--font-mono); }
+
+  .custom-scrollbar::-webkit-scrollbar       { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color);
+    border-radius: 2px;
+  }
+}
+
+/*
+ * AURORA BLOBS — NO filter:blur.
+ * filter:blur on a fixed element causes the browser to repaint the
+ * entire viewport on every scroll frame. This is the #1 scroll killer.
+ *
+ * Replacement: large radial-gradient circles with border-radius:50%.
+ * Visually identical soft glow, zero repaint cost.
+ */
+@keyframes aurora-blob {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(10vw,-10vh) scale(1.1); }
+  66%  { transform: translate(-5vw,5vh) scale(0.9); }
+  100% { transform: translate(0,0) scale(1); }
+}
+
+.aurora-blob {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: aurora-blob 20s infinite ease-in-out;
+  z-index: 0;
+  /* will-change:transform tells the browser to keep this on its own GPU layer */
+  will-change: transform;
+  /* NO filter:blur — use opacity instead for the soft look */
+  opacity: 0.35;
+  /* Contain layout/paint so this element never causes ancestor repaints */
+  contain: layout style;
+}
+
+/* Dark mode aurora — subtle */
+:root.dark .aurora-blob { opacity: 0.07; }
+
+/* Light mode colours */
+:root:not(.dark) .aurora-blob:nth-child(1) { background: radial-gradient(circle, #FFD6A6 0%, transparent 70%); }
+:root:not(.dark) .aurora-blob:nth-child(2) { background: radial-gradient(circle, #FFF0BE 0%, transparent 70%); }
+:root:not(.dark) .aurora-blob:nth-child(3) { background: radial-gradient(circle, #FFB399 0%, transparent 70%); }
+
+/* Dark mode colours */
+:root.dark .aurora-blob:nth-child(1) { background: radial-gradient(circle, #a78bfa 0%, transparent 70%); }
+:root.dark .aurora-blob:nth-child(2) { background: radial-gradient(circle, #38bdf8 0%, transparent 70%); }
+:root.dark .aurora-blob:nth-child(3) { background: radial-gradient(circle, #f472b6 0%, transparent 70%); }
+
+/* SHELL */
+.sidebar-shell { background: var(--sidebar-bg); }
+.topbar-shell  { background: var(--topbar-bg); }
+.bento-canvas  { background: transparent; }
+
+/* SELECTION */
+:root:not(.dark) ::selection { background: rgba(192,57,43,0.2); color: #2D1200; }
+:root.dark       ::selection { background: rgba(167,139,250,0.3); color: #f0f0ff; }
