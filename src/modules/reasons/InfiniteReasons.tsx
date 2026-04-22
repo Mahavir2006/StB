@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+// Removed unused imports
 
 const REASONS = [
   "The way you snort when you laugh too hard.",
@@ -23,29 +22,6 @@ const REASONS = [
 ];
 
 export function InfiniteReasons() {
-  const col1Ref = useRef<HTMLDivElement>(null);
-  const col2Ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!col1Ref.current || !col2Ref.current) return;
-
-    const tween1 = gsap.to(col1Ref.current, { yPercent: -50, ease: 'none', duration: 30, repeat: -1 });
-    const tween2 = gsap.to(col2Ref.current, { yPercent: -50, ease: 'none', duration: 40, repeat: -1 });
-
-    // Pause when tab is hidden — saves CPU
-    const onVisibility = () => {
-      if (document.hidden) { tween1.pause(); tween2.pause(); }
-      else { tween1.resume(); tween2.resume(); }
-    };
-    document.addEventListener('visibilitychange', onVisibility);
-
-    return () => {
-      tween1.kill();
-      tween2.kill();
-      document.removeEventListener('visibilitychange', onVisibility);
-    };
-  }, []);
-
   const repeatReasons = [...REASONS, ...REASONS, ...REASONS];
   const half = Math.floor(repeatReasons.length / 2);
   const leftCol = repeatReasons.slice(0, half);
@@ -63,8 +39,8 @@ export function InfiniteReasons() {
       </h2>
 
       <div className="flex gap-8 w-full max-w-5xl h-[120%] -mt-[10%] opacity-80">
-         <div className="flex-1 overflow-hidden">
-            <div ref={col1Ref} className="flex flex-col gap-6 pt-10">
+         <div className="flex-1 overflow-hidden pointer-events-none sm:pointer-events-auto">
+            <div className="flex flex-col gap-6 pt-10 marquee-up">
               {leftCol.map((r, i) => (
                 <div key={i} className="text-xl md:text-2xl font-emotional italic text-center p-4 transition-colors hover:scale-105 transform origin-center cursor-default" style={{ '--tw-text-opacity': 1 } as React.CSSProperties} onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent-primary-start)')} onMouseLeave={e => (e.currentTarget.style.color = '')}>
                   {r}
@@ -73,8 +49,8 @@ export function InfiniteReasons() {
             </div>
          </div>
          
-         <div className="flex-1 overflow-hidden hidden md:block">
-            <div ref={col2Ref} className="flex flex-col gap-8 pt-40">
+         <div className="flex-1 overflow-hidden hidden md:block pointer-events-none md:pointer-events-auto">
+            <div className="flex flex-col gap-8 pt-40 marquee-up-slow">
               {rightCol.map((r, i) => (
                 <div key={i} className="text-xl md:text-3xl font-emotional italic text-center text-[var(--text-secondary)] p-4 hover:text-[var(--color-accent-pink-start)] transition-colors hover:scale-105 transform origin-center cursor-default">
                   {r}

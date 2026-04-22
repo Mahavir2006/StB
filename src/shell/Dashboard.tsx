@@ -4,7 +4,6 @@ import { ArrowLeft } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { BentoGrid } from './BentoGrid';
-import { useTheme } from '../hooks/useTheme';
 
 /* ─── Lazy-load every section — none of these load until first navigation ─── */
 const CinemaVault    = lazy(() => import('../modules/vault/CinemaVault').then(m => ({ default: m.CinemaVault })));
@@ -17,8 +16,8 @@ const WishWall       = lazy(() => import('../modules/wishes/WishWall').then(m =>
 const GlobeScene     = lazy(() => import('../modules/globe/GlobeScene').then(m => ({ default: m.GlobeScene })));
 const FinaleScene    = lazy(() => import('../modules/finale/FinaleScene').then(m => ({ default: m.FinaleScene })));
 const SecretUnlock   = lazy(() => import('../modules/unlock/SecretUnlock').then(m => ({ default: m.SecretUnlock })));
-/* Sparkles is heavy (tsparticles) — lazy + only dark mode */
-const SparklesCore   = lazy(() => import('../components/ui/sparkles').then(m => ({ default: m.SparklesCore })));
+/* Optimized native Canvas algorithm replaces heavy tsparticles */
+const CanvasBackground = lazy(() => import('../components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
 const SECTION_LABELS: Record<string, string> = {
   overview:  'Home',
@@ -48,7 +47,6 @@ function SectionLoader() {
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [showUnlock, setShowUnlock] = useState(false);
-  const { theme } = useTheme();
 
   const isHome = activeTab === 'overview';
 
@@ -64,21 +62,10 @@ export function Dashboard() {
       <div className="flex-1 flex flex-col h-full relative overflow-hidden"
         style={{ background: 'var(--canvas-bg)' }}>
 
-        {/* Sparkles — dark mode only, lazy loaded, pointer-events none */}
-        {theme === 'dark' && (
-          <Suspense fallback={null}>
-            <SparklesCore
-              id="dashboard-sparkles"
-              className="absolute inset-0 w-full h-full pointer-events-none z-0"
-              background="transparent"
-              particleColor="#a78bfa"
-              particleDensity={35}
-              minSize={0.3}
-              maxSize={0.9}
-              speed={0.5}
-            />
-          </Suspense>
-        )}
+        {/* Canvas Background — Optimized lightweight canvas logic for both theme modes */}
+        <Suspense fallback={null}>
+          <CanvasBackground />
+        </Suspense>
 
         {/* Aurora blobs — CSS only, GPU transform, no blur on body */}
         <div className="aurora-blob w-[60vw] h-[60vw] top-[-10vh] left-[-10vw]"

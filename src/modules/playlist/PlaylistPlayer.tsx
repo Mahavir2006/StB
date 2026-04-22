@@ -27,11 +27,11 @@ function WaveformBars({ color, active }: { color: string; active: boolean }) {
       {Array.from({ length: 20 }).map((_, i) => (
         <motion.div
           key={i}
-          className="w-[2px] rounded-full"
-          style={{ backgroundColor: color }}
+          className="w-[2px] rounded-full origin-bottom"
+          style={{ backgroundColor: color, height: '100%', willChange: 'transform' }}
           animate={active ? {
-            height: ['40%', `${30 + Math.random() * 70}%`, '40%'],
-          } : { height: '20%' }}
+            scaleY: [0.4, 0.3 + Math.random() * 0.7, 0.4],
+          } : { scaleY: 0.2 }}
           transition={{
             duration: 0.4 + Math.random() * 0.4,
             repeat: Infinity,

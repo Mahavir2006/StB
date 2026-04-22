@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import VanillaTilt from 'vanilla-tilt';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Heart, Play } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -28,34 +27,17 @@ const MEDIA: MediaItem[] = [
 ];
 
 /* ─────────────────────────────────────────────────────────────────────────── */
-/*  Tilt card — tilt only initialises on first hover, not on mount             */
+/*  Card — Optimized for Zero-JS Hover Effects                                 */
 /* ─────────────────────────────────────────────────────────────────────────── */
 function TiltCard({ item, onClick }: { item: MediaItem; onClick: () => void }) {
-  const cardRef  = useRef<HTMLDivElement>(null);
-  const tiltInit = useRef(false);
-
-  /* Init tilt lazily on first mouseenter — avoids 10 simultaneous listeners */
-  const handleMouseEnter = useCallback(() => {
-    if (tiltInit.current || !cardRef.current) return;
-    tiltInit.current = true;
-    VanillaTilt.init(cardRef.current, { max: 10, speed: 500, glare: true, 'max-glare': 0.12 });
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (cardRef.current && (cardRef.current as any).vanillaTilt) {
-        (cardRef.current as any).vanillaTilt.destroy();
-      }
-    };
-  }, []);
-
   return (
     <div
-      ref={cardRef}
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
       className="relative w-full aspect-[4/5] rounded-xl overflow-hidden cursor-pointer group bg-[var(--surface-color)] p-[2px]"
-      style={{ willChange: 'transform' }}
+      style={{
+        transform: 'translateZ(0)',
+        willChange: 'transform'
+      }}
     >
       {/* Gradient border — CSS only, no JS */}
       <div
@@ -63,20 +45,20 @@ function TiltCard({ item, onClick }: { item: MediaItem; onClick: () => void }) {
         style={{ background: 'linear-gradient(135deg, var(--accent-primary-start), var(--accent-secondary-start))' }}
       />
 
-      <div className="relative w-full h-full rounded-[10px] overflow-hidden bg-[var(--surface-color)] z-10">
+      <div className="relative w-full h-full rounded-[10px] overflow-hidden bg-[var(--surface-color)] z-10 transition-transform duration-300 group-hover:scale-[0.98]">
         {/* Always render a plain <img> — no video decode on the grid */}
         <img
           src={item.thumb}
           alt={item.caption}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 will-change-transform"
         />
 
         {/* Video badge */}
         {item.type === 'video' && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/5 transition-colors">
-            <div className="w-11 h-11 rounded-full bg-black/50 flex items-center justify-center text-white border border-white/25">
+            <div className="w-11 h-11 rounded-full bg-black/50 flex items-center justify-center text-white border border-white/25 backdrop-blur-none">
               <Play size={16} className="ml-0.5" />
             </div>
           </div>
@@ -84,7 +66,7 @@ function TiltCard({ item, onClick }: { item: MediaItem; onClick: () => void }) {
 
         {/* Caption — slides up on hover */}
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/75 to-transparent
-          translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          translate-y-full group-hover:translate-y-0 transition-transform duration-300 will-change-transform">
           <p className="text-white/90 font-emotional italic text-sm line-clamp-2">{item.caption}</p>
         </div>
       </div>

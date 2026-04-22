@@ -87,6 +87,8 @@
     box-shadow: var(--glass-shadow);
     /* Promote to own compositing layer so it doesn't repaint with scroll */
     transform: translateZ(0);
+    will-change: transform;
+    contain: layout paint;
   }
 
   .text-gradient {
@@ -108,6 +110,26 @@
     background: var(--scrollbar-color);
     border-radius: 2px;
   }
+}
+
+/* MARQUEE ANIMATIONS (Hardware Accelerated) */
+@keyframes marquee-up {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.marquee-up {
+  will-change: transform;
+  animation: marquee-up 30s linear infinite;
+  /* Pause animation when not visible or hovered if possible */
+}
+.marquee-up-slow {
+  will-change: transform;
+  animation: marquee-up 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-up, .marquee-up-slow { animation-duration: 120s; }
 }
 
 /*
