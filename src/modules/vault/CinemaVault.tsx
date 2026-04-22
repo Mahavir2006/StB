@@ -24,6 +24,12 @@ const MEDIA: MediaItem[] = [
   { id: 8,  type: 'video', src: '/memories/VID-20260418-WA0035.mp4',                        thumb: '/memories/Photo_1.jpg',   caption: 'April 18 — you had to be there.',                    date: 'April 18, 2026'   },
   { id: 9,  type: 'video', src: '/memories/Screen_Recording_20260411_160231.mp4',           thumb: '/memories/Photo_2.jpg',   caption: 'April 11 — screen recording of something chaotic.',  date: 'April 11, 2026'   },
   { id: 10, type: 'video', src: '/memories/IMG_20260420_203643_081.mp4',                    thumb: '/memories/Photo_3.jpg',   caption: 'April 20 — late night energy.',                      date: 'April 20, 2026'   },
+  { id: 11, type: 'photo', src: '/memories/IMG-20260422-WA0004.jpg',                        thumb: '/memories/IMG-20260422-WA0004.jpg', caption: 'April 22 — living in the moment.',           date: 'April 22, 2026'   },
+  { id: 12, type: 'photo', src: '/memories/IMG-20260422-WA0005.jpg',                        thumb: '/memories/IMG-20260422-WA0005.jpg', caption: 'April 22 — absolutely iconic.',              date: 'April 22, 2026'   },
+  { id: 13, type: 'photo', src: '/memories/IMG-20260422-WA0011.jpg',                        thumb: '/memories/IMG-20260422-WA0011.jpg', caption: 'April 22 — capturing the vibe.',             date: 'April 22, 2026'   },
+  { id: 14, type: 'photo', src: '/memories/IMG-20260422-WA0022.jpg',                        thumb: '/memories/IMG-20260422-WA0022.jpg', caption: 'April 22 — unfiltered joy.',                 date: 'April 22, 2026'   },
+  { id: 15, type: 'photo', src: '/memories/IMG-20260422-WA0034.jpg',                        thumb: '/memories/IMG-20260422-WA0034.jpg', caption: 'April 22 — another beautiful frame.',        date: 'April 22, 2026'   },
+  { id: 16, type: 'photo', src: '/memories/IMG-20260422-WA0035.jpg',                        thumb: '/memories/IMG-20260422-WA0035.jpg', caption: 'April 22 — the perfect ending.',             date: 'April 22, 2026'   },
 ];
 
 /* ─────────────────────────────────────────────────────────────────────────── */
