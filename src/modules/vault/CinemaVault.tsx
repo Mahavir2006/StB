@@ -14,22 +14,22 @@ interface MediaItem {
 }
 
 const MEDIA: MediaItem[] = [
-  { id: 1,  type: 'photo', src: '/memories/Photo_1.jpg',                                    thumb: '/memories/Photo_1.jpg',   caption: 'A moment worth keeping forever.',                    date: 'April 2026'       },
-  { id: 2,  type: 'photo', src: '/memories/Photo_2.jpg',                                    thumb: '/memories/Photo_2.jpg',   caption: 'Every picture tells a story.',                       date: 'April 2026'       },
-  { id: 3,  type: 'photo', src: '/memories/Photo_3.jpg',                                    thumb: '/memories/Photo_3.jpg',   caption: 'The best kind of chaos.',                            date: 'April 2026'       },
-  { id: 4,  type: 'photo', src: '/memories/Photo_4.jpg',                                    thumb: '/memories/Photo_4.jpg',   caption: 'Frozen in time, perfectly.',                         date: 'April 2026'       },
-  { id: 5,  type: 'photo', src: '/memories/IMG_20241013_161439_583@-689708039.jpg',          thumb: '/memories/IMG_20241013_161439_583@-689708039.jpg', caption: 'October 2024 — a good day.', date: 'October 2024'  },
-  { id: 6,  type: 'photo', src: '/memories/IMG_20260415_180607_807@954554821.jpg',           thumb: '/memories/IMG_20260415_180607_807@954554821.jpg',  caption: 'April 15 — golden hour.',    date: 'April 15, 2026' },
+  { id: 15, type: 'photo', src: '/memories/IMG-20260422-WA0034.jpg',                        thumb: '/memories/IMG-20260422-WA0034.jpg', caption: 'Oh my god, look at you',        date: '2006-2007'   },
+  { id: 16, type: 'photo', src: '/memories/IMG-20260422-WA0035.jpg',                        thumb: '/memories/IMG-20260422-WA0035.jpg', caption: 'Iska itna cute dikhna band karao koi please',             date: '2007'   },
+  { id: 14, type: 'photo', src: '/memories/IMG-20260422-WA0022.jpg',                        thumb: '/memories/IMG-20260422-WA0022.jpg', caption: 'Chhotu Stuti, lemme guess your age...',                 date: 'August 2007'   },
+  { id: 1,  type: 'photo', src: '/memories/Photo_1.jpg',                                    thumb: '/memories/Photo_1.jpg',   caption: 'Juhu Beach, I still remember uff..',                    date: '2nd April 2026'       },
+  { id: 2,  type: 'photo', src: '/memories/Photo_2.jpg',                                    thumb: '/memories/Photo_2.jpg',   caption: 'The Password confession.',                       date: '2nd April 2026'       },
+  { id: 3,  type: 'photo', src: '/memories/Photo_3.jpg',                                    thumb: '/memories/Photo_3.jpg',   caption: 'The stageplay chaos, hoestly I was at the top of the moon because you came',                            date: '16th March 2026'       },
+  { id: 4,  type: 'photo', src: '/memories/Photo_4.jpg',                                    thumb: '/memories/Photo_4.jpg',   caption: '2nd time beach',                         date: '7th April 2026'       },
+  { id: 5,  type: 'photo', src: '/memories/IMG_20241013_161439_583@-689708039.jpg',          thumb: '/memories/IMG_20241013_161439_583@-689708039.jpg', caption: 'I remember we went to dinner with "TANISHA"', date: '23rd October 2024'  },
+  { id: 6,  type: 'photo', src: '/memories/IMG_20260415_180607_807@954554821.jpg',           thumb: '/memories/IMG_20260415_180607_807@954554821.jpg',  caption: 'U2M kaa photo',    date: 'April 15, 2026' },
   { id: 7,  type: 'photo', src: '/memories/Screenshot_20260411-154447.jpg',                 thumb: '/memories/Screenshot_20260411-154447.jpg',         caption: 'A screenshot worth saving.', date: 'April 11, 2026' },
-  { id: 8,  type: 'video', src: '/memories/VID-20260418-WA0035.mp4',                        thumb: '/memories/Photo_1.jpg',   caption: 'April 18 — you had to be there.',                    date: 'April 18, 2026'   },
+  { id: 11, type: 'photo', src: '/memories/IMG-20260422-WA0004.jpg',                        thumb: '/memories/IMG-20260422-WA0004.jpg', caption: 'I dont know iska date but I liked this photo',           date: 'random'   },
+  { id: 12, type: 'photo', src: '/memories/IMG-20260422-WA0005.jpg',                        thumb: '/memories/IMG-20260422-WA0005.jpg', caption: 'I swear I loved this photo and I promise to make this as my wallpaper one day',              date: 'random'   },
+  { id: 13, type: 'photo', src: '/memories/IMG-20260422-WA0011.jpg',                        thumb: '/memories/IMG-20260422-WA0011.jpg', caption: 'The way you were laughing with your dadi in the frame made me add this',             date: 'random'   },
+  { id: 8,  type: 'video', src: '/memories/VID-20260418-WA0035.mp4',                        thumb: '/memories/Photo_1.jpg',   caption: 'Bowling day bhai,I mean woah what a day for me that was',                    date: 'April 18, 2026'   },
   { id: 9,  type: 'video', src: '/memories/Screen_Recording_20260411_160231.mp4',           thumb: '/memories/Photo_2.jpg',   caption: 'April 11 — screen recording of something chaotic.',  date: 'April 11, 2026'   },
-  { id: 10, type: 'video', src: '/memories/IMG_20260420_203643_081.mp4',                    thumb: '/memories/Photo_3.jpg',   caption: 'April 20 — late night energy.',                      date: 'April 20, 2026'   },
-  { id: 11, type: 'photo', src: '/memories/IMG-20260422-WA0004.jpg',                        thumb: '/memories/IMG-20260422-WA0004.jpg', caption: 'April 22 — living in the moment.',           date: 'April 22, 2026'   },
-  { id: 12, type: 'photo', src: '/memories/IMG-20260422-WA0005.jpg',                        thumb: '/memories/IMG-20260422-WA0005.jpg', caption: 'April 22 — absolutely iconic.',              date: 'April 22, 2026'   },
-  { id: 13, type: 'photo', src: '/memories/IMG-20260422-WA0011.jpg',                        thumb: '/memories/IMG-20260422-WA0011.jpg', caption: 'April 22 — capturing the vibe.',             date: 'April 22, 2026'   },
-  { id: 14, type: 'photo', src: '/memories/IMG-20260422-WA0022.jpg',                        thumb: '/memories/IMG-20260422-WA0022.jpg', caption: 'April 22 — unfiltered joy.',                 date: 'April 22, 2026'   },
-  { id: 15, type: 'photo', src: '/memories/IMG-20260422-WA0034.jpg',                        thumb: '/memories/IMG-20260422-WA0034.jpg', caption: 'April 22 — another beautiful frame.',        date: 'April 22, 2026'   },
-  { id: 16, type: 'photo', src: '/memories/IMG-20260422-WA0035.jpg',                        thumb: '/memories/IMG-20260422-WA0035.jpg', caption: 'April 22 — the perfect ending.',             date: 'April 22, 2026'   },
+  { id: 10, type: 'video', src: '/memories/IMG_20260420_203643_081.mp4',                    thumb: '/memories/Photo_3.jpg',   caption: 'April 20 — someone got a trophy here......',                      date: '23rd October, 2026'   },
 ];
 
 /* ─────────────────────────────────────────────────────────────────────────── */
