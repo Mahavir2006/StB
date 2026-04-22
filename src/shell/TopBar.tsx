@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Sun, Moon, Bell, Menu } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 
-export function TopBar({ activeLabel, onMenuClick }: { activeLabel: string; onMenuClick: () => void }) {
+export function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -18,10 +18,6 @@ export function TopBar({ activeLabel, onMenuClick }: { activeLabel: string; onMe
         >
           <Menu size={20} />
         </button>
-        <div className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-          <span className="opacity-60">stuti.world / </span>
-          <span style={{ color: 'var(--text-primary)' }}>{activeLabel}</span>
-        </div>
       </div>
 
       <div className="flex items-center gap-3 md:gap-4">

@@ -19,18 +19,6 @@ const SecretUnlock   = lazy(() => import('../modules/unlock/SecretUnlock').then(
 /* Optimized native Canvas algorithm replaces heavy tsparticles */
 const CanvasBackground = lazy(() => import('../components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
 
-const SECTION_LABELS: Record<string, string> = {
-  overview:  'Home',
-  vault:     'Cinema Vault',
-  quiz:      'Stuti Quiz',
-  story:     'Our Story',
-  stats:     'Wrapped Stats',
-  places:    "Places We've Been",
-  playlist:  'Playlist',
-  reasons:   'Reasons I Love You',
-  wishes:    'Friends Wall',
-  finale:    'Grand Finale',
-};
 
 /* Simple fade — NO blur filter (blur transitions are expensive) */
 const pageVariants = {
@@ -75,7 +63,7 @@ export function Dashboard() {
         <div className="aurora-blob w-[40vw] h-[40vw] bottom-[-10vh] left-[20vw]"
           style={{ backgroundColor: 'var(--color-accent-pink-start)', animationDuration: '22s', animationDirection: 'alternate-reverse' }} />
 
-        <TopBar activeLabel={SECTION_LABELS[activeTab] ?? 'Home'} onMenuClick={() => {}} />
+        <TopBar onMenuClick={() => {}} />
 
         {/* Back button */}
         <AnimatePresence>
