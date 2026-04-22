@@ -113,142 +113,152 @@ function MediaModal({ item, onClose, onPrev, onNext, hasPrev, hasNext, currentId
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[60] flex flex-col"
-      style={{ background: 'rgba(0,0,0,0.96)' }}
+      style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
     >
       {/* ── Top bar ── */}
-      <div className="flex items-center justify-between px-5 py-3 shrink-0"
-        style={{ background: 'rgba(0,0,0,0.85)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="flex items-center justify-between px-6 py-4 shrink-0 border-b border-white/10 bg-black/40">
         <button
           onClick={onClose}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium
-            text-white hover:text-white bg-white/15 hover:bg-white/25
-            border border-white/20 hover:border-white/35 transition-all group"
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+            text-white hover:text-white bg-white/10 hover:bg-white/20
+            border border-white/20 hover:border-white/30 transition-all group"
         >
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" className="group-hover:-translate-x-0.5 transition-transform">
             <path d="M8.5 2L3.5 6.5L8.5 11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Cinema Vault
+          Back to Vault
         </button>
 
-        <span className="text-white/70 text-xs font-mono tabular-nums">
+        <span className="text-white/80 text-sm font-mono tabular-nums bg-black/50 px-4 py-1.5 rounded-full border border-white/10">
           {currentIdx + 1} / {MEDIA.length}
         </span>
 
         <button onClick={onClose}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-white/50
-            hover:text-white hover:bg-white/15 transition-all"
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white/70
+            hover:text-white hover:bg-white/15 transition-all border border-transparent hover:border-white/20"
           aria-label="Close">
-          <X size={17} />
+          <X size={20} />
         </button>
       </div>
 
-      {/* ── Media area ── */}
-      <div className="flex-1 flex items-center justify-center relative px-14 min-h-0">
-        {hasPrev && (
-          <button onClick={onPrev}
-            className="absolute left-3 z-10 w-9 h-9 rounded-full flex items-center justify-center
-              text-white/50 hover:text-white bg-white/8 hover:bg-white/18
-              border border-white/10 transition-all"
-            aria-label="Previous">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <path d="M9.5 3L5 7.5L9.5 12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        )}
-
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.18 }}
-          className="w-full max-w-4xl max-h-full flex items-center justify-center"
-        >
-          {item.type === 'video' ? (
-            /* preload="metadata" — only fetches duration/dimensions, not the full file */
-            <video
-              key={item.src}
-              src={item.src}
-              poster={item.thumb}
-              controls
-              autoPlay
-              preload="metadata"
-              className="w-full max-h-[65vh] rounded-xl object-contain shadow-[0_24px_60px_rgba(0,0,0,0.8)]"
-            />
-          ) : (
-            <img
-              src={item.src}
-              alt={item.caption}
-              className="w-full max-h-[65vh] rounded-xl object-contain shadow-[0_24px_60px_rgba(0,0,0,0.8)]"
-            />
+      <div className="flex-1 flex flex-col md:flex-row min-h-0">
+        {/* ── LEFT: Media Area ── */}
+        <div className="flex-1 flex items-center justify-center relative px-6 md:px-12 py-8 min-h-0 group">
+          {hasPrev && (
+            <button onClick={onPrev}
+              className="absolute left-6 z-10 w-12 h-12 rounded-full flex items-center justify-center
+                text-white/70 hover:text-white bg-black/40 hover:bg-black/70 backdrop-blur-md
+                border border-white/10 hover:border-white/30 transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Previous">
+              <svg width="20" height="20" viewBox="0 0 15 15" fill="none">
+                <path d="M9.5 3L5 7.5L9.5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
           )}
-        </motion.div>
 
-        {hasNext && (
-          <button onClick={onNext}
-            className="absolute right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center
-              text-white/50 hover:text-white bg-white/8 hover:bg-white/18
-              border border-white/10 transition-all"
-            aria-label="Next">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <path d="M5.5 3L10 7.5L5.5 12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        )}
-      </div>
-
-      {/* ── Bottom: caption + heart + thumbnails ── */}
-      <div className="shrink-0 px-5 pt-4 pb-4"
-        style={{ background: 'rgba(0,0,0,0.85)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        {/* Caption row */}
-        <div className="flex items-center justify-between mb-3 max-w-4xl mx-auto">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest block mb-1 text-[#FF9A86]">
-              {item.date}
-            </span>
-            <p className="text-white font-emotional italic text-base leading-snug max-w-lg">
-              {item.caption}
-            </p>
-          </div>
-          <button
-            onClick={handleHeart}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all shrink-0 ml-4 text-sm"
-            style={{
-              borderColor: hearted ? 'rgba(239,68,68,0.6)'  : 'rgba(255,255,255,0.25)',
-              background:   hearted ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.10)',
-              color:        hearted ? '#ef4444'              : '#ffffff',
-            }}
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, scale: 0.96, x: 10 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="w-full h-full max-w-5xl flex items-center justify-center relative"
           >
-            <motion.div animate={heartAnim ? { scale: [1, 1.5, 1] } : {}} transition={{ duration: 0.3 }}>
-              <Heart size={14} fill={hearted ? 'currentColor' : 'none'} />
-            </motion.div>
-            Core Memory
-          </button>
+            {item.type === 'video' ? (
+              <video
+                key={item.src}
+                src={item.src}
+                poster={item.thumb}
+                controls
+                autoPlay
+                preload="metadata"
+                className="max-w-full max-h-full rounded-xl object-contain shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-white/10"
+              />
+            ) : (
+              <img
+                src={item.src}
+                alt={item.caption}
+                className="max-w-full max-h-full rounded-xl object-contain shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-white/10"
+              />
+            )}
+          </motion.div>
+
+          {hasNext && (
+            <button onClick={onNext}
+              className="absolute right-6 z-10 w-12 h-12 rounded-full flex items-center justify-center
+                text-white/70 hover:text-white bg-black/40 hover:bg-black/70 backdrop-blur-md
+                border border-white/10 hover:border-white/30 transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 15 15" fill="none">
+                <path d="M5.5 3L10 7.5L5.5 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          )}
         </div>
 
-        {/* Thumbnail strip — photos only (no video decode) */}
-        <div className="flex gap-1.5 justify-center overflow-x-auto pb-0.5 max-w-4xl mx-auto">
-          {MEDIA.map((m, idx) => (
-            <button
-              key={m.id}
-              onClick={() => {
-                const diff = idx - currentIdx;
-                if (diff < 0) for (let i = 0; i < -diff; i++) onPrev();
-                else if (diff > 0) for (let i = 0; i < diff; i++) onNext();
-              }}
-              className="shrink-0 w-10 h-10 rounded-md overflow-hidden border-2 transition-all"
-              style={{
-                borderColor: m.id === item.id ? 'var(--accent-primary-start)' : 'transparent',
-                opacity: m.id === item.id ? 1 : 0.4,
-              }}
-            >
-              <img src={m.thumb} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-              {m.type === 'video' && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Play size={8} className="text-white" />
-                </div>
-              )}
-            </button>
-          ))}
+        {/* ── RIGHT: Structured Info Panel ── */}
+        <div className="w-full md:w-[380px] lg:w-[420px] shrink-0 flex flex-col bg-black/40 border-t md:border-t-0 md:border-l border-white/10 shadow-[-10px_0_30px_rgba(0,0,0,0.3)]">
+          
+          {/* Info Details Content */}
+          <div className="flex-1 overflow-y-auto p-8 flex flex-col">
+            <span className="text-sm font-bold uppercase tracking-widest mb-6 text-[#FF9A86] flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-[#FF9A86] animate-pulse" />
+              {item.date}
+            </span>
+            
+            <p className="text-white font-emotional italic text-3xl leading-snug mb-auto" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+              "{item.caption}"
+            </p>
+
+            <div className="mt-12 flex flex-col">
+              <button
+                onClick={handleHeart}
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl border transition-all duration-300 text-base font-semibold tracking-wide"
+                style={{
+                  borderColor: hearted ? 'rgba(239,68,68,0.6)'  : 'rgba(255,255,255,0.2)',
+                  background:   hearted ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.08)',
+                  color:        hearted ? '#ef4444'              : '#ffffff',
+                }}
+              >
+                <motion.div animate={heartAnim ? { scale: [1, 1.8, 1] } : {}} transition={{ duration: 0.3 }}>
+                  <Heart size={20} fill={hearted ? 'currentColor' : 'none'} />
+                </motion.div>
+                {hearted ? "Saved to Core Memory" : "Mark as Core Memory"}
+              </button>
+              <p className="text-white/40 text-xs font-mono mt-3 text-center">
+                Press Left/Right arrows to navigate
+              </p>
+            </div>
+          </div>
+
+          {/* Bottom Nav Thumbs */}
+          <div className="p-6 border-t border-white/10 bg-black/30">
+            <h4 className="text-xs font-mono text-white/50 mb-4 uppercase tracking-widest">More Memories</h4>
+            <div className="grid grid-cols-5 gap-2.5">
+              {MEDIA.map((m, idx) => (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    const diff = idx - currentIdx;
+                    if (diff < 0) for (let i = 0; i < -diff; i++) onPrev();
+                    else if (diff > 0) for (let i = 0; i < diff; i++) onNext();
+                  }}
+                  className="aspect-square rounded-lg overflow-hidden border-2 transition-all relative group shadow-lg"
+                  style={{
+                    borderColor: m.id === item.id ? 'var(--accent-primary-start)' : 'transparent',
+                    opacity: m.id === item.id ? 1 : 0.4,
+                  }}
+                >
+                  <img src={m.thumb} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                  {m.type === 'video' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Play size={12} className="text-white" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
         </div>
       </div>
     </motion.div>
