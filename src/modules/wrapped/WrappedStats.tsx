@@ -56,15 +56,22 @@ interface StatCard {
   desc?: string;
   colSpan: number;
   isSmile?: boolean;
+  textClass?: string;
 }
 
 const STATS: StatCard[] = [
-  { id: 'days',   label: 'Days known together',   value: 365,   suffix: '+',  colSpan: 2 },
-  { id: 'laughs', label: 'Laughs had',             textVal: 'Infinite',        colSpan: 1 },
-  { id: 'movies', label: 'Films watched together', value: 42,                  colSpan: 1 },
-  { id: 'msgs',   label: 'Messages sent',          value: 15420, prefix: '~',  colSpan: 2 },
-  { id: 'word',   label: 'Most used word',         textVal: '"Wait"',          colSpan: 1 },
-  { id: 'reply',  label: 'Avg reply time',         textVal: 'Immediately*', desc: '*when she wants to', colSpan: 1 },
+  { id: 'days',   label: 'Days known together',   value: 730,   suffix: '+ days',  colSpan: 2 },
+  { id: 'laughs', label: 'Laughs had',             textVal: 'Infinite', textClass: 'text-3xl lg:text-4xl', colSpan: 1 },
+  { id: 'movies', label: 'Films watched together', value: 5, suffix: ' & counting', textClass: 'text-2xl lg:text-3xl', colSpan: 1 },
+  { id: 'msgs',   label: 'Messages sent',          value: 73295, suffix: '+',  colSpan: 2 },
+  { id: 'word',   label: 'Most used word',         textVal: '"bhai"',          colSpan: 1 },
+  { id: 'reply',  label: 'Avg reply time',         textVal: 'Immediately*', textClass: 'text-2xl', desc: '*when she wants to', colSpan: 1 },
+  
+  { id: 'rage',   label: 'Ragebaiting Mahavir',    value: 10, suffix: 'M+ times',  colSpan: 2 },
+  { id: 'jokes',  label: "Jokes on Mahavir's dad", textVal: 'infinite time', textClass: 'text-xl lg:text-2xl', colSpan: 1 },
+  { id: 'fought', label: 'Fought',                 value: 4, prefix: 'Longest for ', suffix: ' months', textClass: 'text-[1.1rem] lg:text-xl', colSpan: 1 },
+  { id: 'call',   label: 'Call hours',             value: 2000, suffix: '+ hours', colSpan: 2 },
+  
   { id: 'smiles', label: 'Times you smiled today', isSmile: true,              colSpan: 2 },
 ];
 
@@ -101,18 +108,18 @@ export function WrappedStats() {
               </span>
             </div>
 
-            <div className="font-mono text-4xl lg:text-5xl font-bold text-[var(--text-primary)]">
+            <div className={`font-mono font-bold text-[var(--text-primary)] whitespace-nowrap ${stat.textClass || 'text-4xl lg:text-5xl'}`}>
               {stat.isSmile ? (
                 <SmileCounter />
               ) : stat.textVal ? (
                 <span style={{ color: 'var(--accent-primary-start)' }}>{stat.textVal}</span>
               ) : (
-                <span className="flex items-baseline gap-1">
-                  {stat.prefix && <span className="text-2xl text-[var(--text-secondary)]">{stat.prefix}</span>}
+                <span className="flex items-baseline gap-x-2">
+                  {stat.prefix && <span className="text-opacity-70 text-[var(--text-secondary)]" style={{ fontSize: '0.7em' }}>{stat.prefix}</span>}
                   <span style={{ color: 'var(--accent-primary-start)' }}>
                     <AnimatedNumber value={stat.value ?? 0} />
                   </span>
-                  {stat.suffix && <span className="text-2xl" style={{ color: 'var(--accent-secondary-start)' }}>{stat.suffix}</span>}
+                  {stat.suffix && <span style={{ color: 'var(--accent-secondary-start)', fontSize: '0.7em' }}>{stat.suffix}</span>}
                 </span>
               )}
             </div>
