@@ -93,7 +93,7 @@ export function GlobeScene() {
         </p>
       </div>
 
-      <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] rounded-3xl overflow-hidden glassmorphism border-[0.5px] border-[var(--border-color)] group z-0">
+      <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] rounded-3xl overflow-hidden bg-[var(--surface-color)] border-[0.5px] border-[var(--border-color)] group z-0 ring-1 ring-black/5" style={{ transform: 'translateZ(0)', willChange: 'transform' }}>
         
         {/* The Interactive Map Layer */}
         <MapContainer 
@@ -103,6 +103,7 @@ export function GlobeScene() {
           className="w-full h-full absolute inset-0 z-0 bg-transparent"
           attributionControl={false} // Clean UI
           zoomControl={false} // Clean UI
+          preferCanvas={true} // Optimize performance by using Canvas instead of SVG for Leaflet paths
         >
           <TileLayer url={TILE_URL} attribution={TILE_ATTR} />
           

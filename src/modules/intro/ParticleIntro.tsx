@@ -1,19 +1,59 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// --- Types ---
+interface Particle {
+  x: number;
+  y: number;
+  targetX: number;
+  targetY: number;
+  size: number;
+  vx: number;
+  vy: number;
+  isBokeh: boolean;
+  driftX: number;
+  driftY: number;
+  wobbleSpeed: number;
+  wobbleOffset: number;
+}
+
 function NativeParticleText({ onComplete }: { onComplete: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext('2d', { alpha: false }); // false for performance on full bg redraws
     if (!ctx) return;
 
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
 
-    // --- 1. Generate text targets ---
+    // --- 1. Pre-render Glowing Textures ---
+    const createParticleTexture = (radius: number, coreColor: string, haloColor: string) => {
+      const c = document.createElement('canvas');
+      c.width = radius * 2;
+      c.height = radius * 2;
+      const xCtx = c.getContext('2d');
+      if (xCtx) {
+        const grad = xCtx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+        grad.addColorStop(0, coreColor);
+        grad.addColorStop(0.2, haloColor);
+        grad.addColorStop(1, 'rgba(0,0,0,0)'); // Transparent outer edges
+        xCtx.fillStyle = grad;
+        xCtx.beginPath();
+        xCtx.arc(radius, radius, radius, 0, Math.PI * 2);
+        xCtx.fill();
+      }
+      return c;
+    };
+
+    // Sharp Astrophage Organsims: blinding white core, intense red-crimson aura
+    const sharpTexture = createParticleTexture(8, 'rgba(255, 255, 255, 1)', 'rgba(255, 20, 20, 0.8)');
+    // Out-of-focus background cells (Bokeh) - extremely faint to add depth without clogging legibility
+    const bokehTexture = createParticleTexture(64, 'rgba(255, 50, 50, 0.25)', 'rgba(100, 10, 10, 0.05)');
+
+    // --- 2. Generate text targets ---
     const textCanvas = document.createElement('canvas');
     const tCtx = textCanvas.getContext('2d', { willReadFrequently: true });
     if (!tCtx) return;
@@ -21,102 +61,129 @@ function NativeParticleText({ onComplete }: { onComplete: () => void }) {
     textCanvas.width = width;
     textCanvas.height = height;
     tCtx.fillStyle = 'white';
-    // Use a bold font to get blocky, dense particles
-    const fontSize = Math.min(width * 0.25, 200);
-    tCtx.font = `900 ${fontSize}px sans-serif`;
+    
+    // MASSIVE imposing font to ensure perfect legibility when formed by particles
+    const fontSize = Math.min(width * 0.35, 450);
+    // Use an ultra-black weight to give a thick surface area for the swarm
+    tCtx.font = `900 ${fontSize}px "Inter", sans-serif`; 
     tCtx.textAlign = 'center';
     tCtx.textBaseline = 'middle';
+    tCtx.letterSpacing = '10px';
     tCtx.fillText('STUTI', width / 2, height / 2);
 
     const imgData = tCtx.getImageData(0, 0, width, height).data;
     const targets: { x: number; y: number }[] = [];
     
-    // Sample every 4th pixel to save math, keeping dense enough resolution
-    for (let y = 0; y < height; y += 4) {
-      for (let x = 0; x < width; x += 4) {
+    // Sample densely to form perfect, solid crisp boundaries
+    const sampleStep = window.innerWidth > 768 ? 4 : 3; 
+    for (let y = 0; y < height; y += sampleStep) {
+      for (let x = 0; x < width; x += sampleStep) {
         const i = (y * width + x) * 4;
-        const a = imgData[i + 3];
-        if (a > 128) {
+        // Strict alpha threshold for exact letter edges
+        if (imgData[i + 3] > 150) {
           targets.push({ x, y });
         }
       }
     }
 
-    // --- 2. Initialize Particles ---
-    const particleCount = 2000;
-    const particles = Array.from({ length: particleCount }).map(() => {
-      // Pick a random target from the text shape
+    // --- 3. Initialize Astrophage Swarm ---
+    // Massive particle swarm for density
+    const particleCount = Math.min(targets.length, window.innerWidth > 768 ? 4000 : 2000);
+    const particles: Particle[] = [];
+
+    for (let i = 0; i < particleCount; i++) {
       const target = targets.length > 0 
           ? targets[Math.floor(Math.random() * targets.length)] 
           : { x: width/2, y: height/2 };
 
-      return {
+      // Only exactly 3% bokeh so they look like massive deep-space entities passing, without muddying the text
+      const isBokeh = Math.random() > 0.97;
+      
+      particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        originX: Math.random() * width,
-        originY: Math.random() * height,
         targetX: target.x,
         targetY: target.y,
-        size: Math.random() * 2 + 1,
+        // Sharp particles stay incredibly tiny so the swarm resolution is ultra-high definition
+        size: isBokeh ? Math.random() * 40 + 15 : Math.random() * 2 + 0.5,
         vx: 0,
         vy: 0,
-      };
-    });
+        isBokeh,
+        driftX: (Math.random() - 0.5) * (isBokeh ? 0.3 : 1.0), 
+        driftY: (Math.random() - 0.5) * (isBokeh ? 0.3 : 1.0),
+        wobbleSpeed: Math.random() * 0.04 + 0.01,
+        wobbleOffset: Math.random() * Math.PI * 2,
+      });
+    }
 
     let phase: 'scatter' | 'gather' | 'explode' = 'scatter';
+    let time = 0;
     
-    // Timings
-    const t1 = setTimeout(() => { phase = 'gather'; }, 800);
-    const t2 = setTimeout(() => { phase = 'explode'; }, 3000);
-    const t3 = setTimeout(() => { onComplete(); }, 3500);
+    // Slowed down timings to match a cinematic deep space vibe
+    const t1 = setTimeout(() => { phase = 'gather'; }, 1500);  // Drifting in space
+    const t2 = setTimeout(() => { phase = 'explode'; }, 7000); // Hold the text
+    const t3 = setTimeout(() => { onComplete(); }, 8500);      // Explode outwards
 
     let animationFrameId: number;
 
     const draw = () => {
-      ctx.clearRect(0, 0, width, height);
+      time++;
+      
+      // Standard composite logic for clearing background
+      ctx.globalCompositeOperation = 'source-over';
+      // Fill deep dark space, wiping motion trails smoothly
+      ctx.fillStyle = 'rgba(5, 0, 0, 0.4)'; 
+      ctx.fillRect(0, 0, width, height);
 
-      ctx.fillStyle = '#a78bfa'; // Matches our accent purple
-      ctx.beginPath();
+      // ADDITIVE BLENDING: This is the secret magic for glowing sci-fi energy
+      ctx.globalCompositeOperation = 'lighter';
 
       for (let i = 0; i < particleCount; i++) {
         const p = particles[i];
 
         if (phase === 'scatter') {
-          // Drift slowly like stars
-          p.x += (Math.random() - 0.5) * 0.5;
-          p.y += (Math.random() - 0.5) * 0.5;
+          p.x += p.driftX;
+          p.y += p.driftY;
+          p.x += Math.sin(time * p.wobbleSpeed + p.wobbleOffset) * 0.3;
+          p.y += Math.cos(time * p.wobbleSpeed + p.wobbleOffset) * 0.3;
+          
         } else if (phase === 'gather') {
-          // Snap tightly to the target text shape
+          // Extremely slow organic swarm homing
           const dx = p.targetX - p.x;
           const dy = p.targetY - p.y;
-          p.vx += dx * 0.02;     // spring
-          p.vy += dy * 0.02;
-          p.vx *= 0.85;          // friction
-          p.vy *= 0.85;
+          
+          p.vx += dx * 0.002; 
+          p.vy += dy * 0.002;
+          p.vx *= 0.94; // Thick fluid friction
+          p.vy *= 0.94;
           
           p.x += p.vx;
           p.y += p.vy;
           
-          // Slight wobble to keep it feeling alive
-          p.x += (Math.random() - 0.5) * 1.5;
-          p.y += (Math.random() - 0.5) * 1.5;
+          // Organic vibration
+          p.x += Math.sin(time * p.wobbleSpeed * 2.5 + p.wobbleOffset) * 0.6;
+          p.y += Math.cos(time * p.wobbleSpeed * 2.5 + p.wobbleOffset) * 0.6;
+          
         } else if (phase === 'explode') {
-          // Explode outwards rapidly
           const cx = width / 2;
           const cy = height / 2;
           const angle = Math.atan2(p.y - cy, p.x - cx);
-          p.vx += Math.cos(angle) * 5;
-          p.vy += Math.sin(angle) * 5;
           
+          // Blast force varies to create depth during explosion
+          const blastForce = p.isBokeh ? 3 : 8 + Math.random() * 10;
+          p.vx += Math.cos(angle) * blastForce;
+          p.vy += Math.sin(angle) * blastForce;
+          
+          p.vx *= 0.92;
+          p.vy *= 0.92;
           p.x += p.vx;
           p.y += p.vy;
         }
 
-        // We use rect instead of arc for massive perf boost on 2000 items
-        ctx.rect(p.x, p.y, p.size, p.size);
+        // Extremely fast blitting from off-screen canvases!
+        const img = p.isBokeh ? bokehTexture : sharpTexture;
+        ctx.drawImage(img, p.x - p.size, p.y - p.size, p.size * 2, p.size * 2);
       }
-      
-      ctx.fill();
 
       animationFrameId = requestAnimationFrame(draw);
     };
@@ -138,7 +205,7 @@ function NativeParticleText({ onComplete }: { onComplete: () => void }) {
     };
   }, [onComplete]);
 
-  return <canvas ref={canvasRef} className="w-full h-full" />;
+  return <canvas ref={canvasRef} className="w-full h-full" />; 
 }
 
 export function ParticleIntro({ onFinished }: { onFinished: () => void }) {
@@ -154,22 +221,22 @@ export function ParticleIntro({ onFinished }: { onFinished: () => void }) {
     <AnimatePresence>
       {!done && (
         <motion.div 
-          className="fixed inset-0 z-[9999] bg-black text-white overflow-hidden flex items-center justify-center"
+          className="fixed inset-0 z-[9999] bg-[#050000] text-white overflow-hidden flex items-center justify-center"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1.5, ease: 'easeInOut' }}
         >
           {/* Skip Button */}
           <motion.button 
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ delay: 1.5 }}
+            animate={{ opacity: 0.3 }}
+            transition={{ delay: 2.5 }}
             onClick={handleSkip}
-            className="absolute bottom-10 right-10 text-sm font-ui border-b border-white/20 pb-0.5 hover:opacity-100 z-50 cursor-pointer"
+            className="absolute bottom-10 right-10 text-xs font-ui tracking-[0.2em] uppercase border-b border-white/20 pb-0.5 hover:opacity-100 z-50 cursor-pointer text-[#ff8080]"
           >
             Skip Intro
           </motion.button>
 
-          {/* High-Performance Native Canvas Instead of WebGL */}
+          {/* High-Performance Canvas Swarm */}
           <div className="absolute inset-0 pointer-events-none">
              <NativeParticleText onComplete={() => setShowHappyBirthday(true)} />
           </div>
@@ -177,19 +244,19 @@ export function ParticleIntro({ onFinished }: { onFinished: () => void }) {
           <AnimatePresence>
             {showHappyBirthday && (
               <motion.h1 
-                className="text-7xl md:text-9xl font-display font-bold text-center z-10 leading-tight"
-                initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
+                className="text-7xl md:text-9xl font-display font-medium text-center z-10 leading-tight tracking-wide"
+                initial={{ opacity: 0, scale: 0.9, filter: 'blur(30px)' }}
                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                exit={{ opacity: 0, scale: 1.05, filter: 'blur(15px)' }}
+                transition={{ duration: 1.8, ease: "easeOut" }}
                 onAnimationComplete={() => {
                   setTimeout(() => {
                     handleSkip();
-                  }, 1800);
+                  }, 2500);
                 }}
               >
-                <span className="text-gradient block">Happy</span>
-                <span className="text-white block mt-2">Birthday</span>
+                <span className="text-white block" style={{ textShadow: '0 0 40px rgba(220, 20, 20, 0.8)' }}>Happy</span>
+                <span className="text-[#ff4d4d] block mt-2" style={{ textShadow: '0 0 40px rgba(255, 60, 60, 0.6)' }}>Birthday</span>
               </motion.h1>
             )}
           </AnimatePresence>
