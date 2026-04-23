@@ -4,30 +4,26 @@ import { ArrowLeft } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { BentoGrid } from './BentoGrid';
+import { CanvasBackground } from '../components/ui/CanvasBackground';
 
-/* ─── Lazy-load every section — none of these load until first navigation ─── */
-const CinemaVault    = lazy(() => import('../modules/vault/CinemaVault').then(m => ({ default: m.CinemaVault })));
-const QuizEngine     = lazy(() => import('../modules/quiz/QuizEngine').then(m => ({ default: m.QuizEngine })));
+/* ─── Lazy-load every section ─── */
+const CinemaVault      = lazy(() => import('../modules/vault/CinemaVault').then(m => ({ default: m.CinemaVault })));
+const QuizEngine       = lazy(() => import('../modules/quiz/QuizEngine').then(m => ({ default: m.QuizEngine })));
 const TypewriterLetter = lazy(() => import('../modules/letter/TypewriterLetter').then(m => ({ default: m.TypewriterLetter })));
-const WrappedStats   = lazy(() => import('../modules/wrapped/WrappedStats').then(m => ({ default: m.WrappedStats })));
-const InfiniteReasons = lazy(() => import('../modules/reasons/InfiniteReasons').then(m => ({ default: m.InfiniteReasons })));
-const PlaylistPlayer = lazy(() => import('../modules/playlist/PlaylistPlayer').then(m => ({ default: m.PlaylistPlayer })));
-const WishWall       = lazy(() => import('../modules/wishes/WishWall').then(m => ({ default: m.WishWall })));
-const GlobeScene     = lazy(() => import('../modules/globe/GlobeScene').then(m => ({ default: m.GlobeScene })));
-const FinaleScene    = lazy(() => import('../modules/finale/FinaleScene').then(m => ({ default: m.FinaleScene })));
-const SecretUnlock   = lazy(() => import('../modules/unlock/SecretUnlock').then(m => ({ default: m.SecretUnlock })));
-/* Optimized native Canvas algorithm replaces heavy tsparticles */
-const CanvasBackground = lazy(() => import('../components/ui/CanvasBackground').then(m => ({ default: m.CanvasBackground })));
+const WrappedStats     = lazy(() => import('../modules/wrapped/WrappedStats').then(m => ({ default: m.WrappedStats })));
+const InfiniteReasons  = lazy(() => import('../modules/reasons/InfiniteReasons').then(m => ({ default: m.InfiniteReasons })));
+const ArtGallery       = lazy(() => import('../modules/gallery/ArtGallery').then(m => ({ default: m.ArtGallery })));
+const WishWall         = lazy(() => import('../modules/wishes/WishWall').then(m => ({ default: m.WishWall })));
+const GlobeScene       = lazy(() => import('../modules/globe/GlobeScene').then(m => ({ default: m.GlobeScene })));
+const FinaleScene      = lazy(() => import('../modules/finale/FinaleScene').then(m => ({ default: m.FinaleScene })));
+const SecretUnlock     = lazy(() => import('../modules/unlock/SecretUnlock').then(m => ({ default: m.SecretUnlock })));
 
-
-/* Simple fade — NO blur filter (blur transitions are expensive) */
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0,  transition: { duration: 0.25, ease: 'easeOut' as const } },
   exit:    { opacity: 0, y: -6, transition: { duration: 0.15, ease: 'easeIn'  as const } },
 };
 
-/* Minimal loading placeholder — no spinner animation */
 function SectionLoader() {
   return <div className="w-full h-32" />;
 }
@@ -50,12 +46,10 @@ export function Dashboard() {
       <div className="flex-1 flex flex-col h-full relative overflow-hidden"
         style={{ background: 'var(--canvas-bg)' }}>
 
-        {/* Canvas Background — Optimized lightweight canvas logic for both theme modes */}
-        <Suspense fallback={null}>
-          <CanvasBackground />
-        </Suspense>
+        {/* Canvas particle background */}
+        <CanvasBackground />
 
-        {/* Aurora blobs — CSS only, GPU transform, no blur on body */}
+        {/* Aurora blobs */}
         <div className="aurora-blob w-[60vw] h-[60vw] top-[-10vh] left-[-10vw]"
           style={{ backgroundColor: 'var(--color-accent-purple-start)' }} />
         <div className="aurora-blob w-[50vw] h-[50vw] top-[40vh] right-[-5vw]"
@@ -79,10 +73,7 @@ export function Dashboard() {
                 onClick={() => setActiveTab('overview')}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium
                   border border-[var(--border-color)] transition-colors duration-150 group"
-                style={{
-                  color: 'var(--text-secondary)',
-                  background: 'var(--surface-color)',
-                }}
+                style={{ color: 'var(--text-secondary)', background: 'var(--surface-color)' }}
                 aria-label="Back to home"
               >
                 <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -103,16 +94,16 @@ export function Dashboard() {
               exit="exit"
             >
               <Suspense fallback={<SectionLoader />}>
-                {activeTab === 'overview'  && <BentoGrid onSelect={navigate} />}
-                {activeTab === 'vault'     && <CinemaVault />}
-                {activeTab === 'quiz'      && <QuizEngine />}
-                {activeTab === 'story'     && <TypewriterLetter />}
-                {activeTab === 'stats'     && <WrappedStats />}
-                {activeTab === 'reasons'   && <InfiniteReasons />}
-                {activeTab === 'playlist'  && <PlaylistPlayer />}
-                {activeTab === 'wishes'    && <WishWall />}
-                {activeTab === 'places'    && <GlobeScene />}
-                {activeTab === 'finale'    && <FinaleScene />}
+                {activeTab === 'overview' && <BentoGrid onSelect={navigate} />}
+                {activeTab === 'vault'    && <CinemaVault />}
+                {activeTab === 'quiz'     && <QuizEngine />}
+                {activeTab === 'story'    && <TypewriterLetter />}
+                {activeTab === 'stats'    && <WrappedStats />}
+                {activeTab === 'reasons'  && <InfiniteReasons />}
+                {activeTab === 'gallery'  && <ArtGallery />}
+                {activeTab === 'wishes'   && <WishWall />}
+                {activeTab === 'places'   && <GlobeScene />}
+                {activeTab === 'finale'   && <FinaleScene />}
               </Suspense>
             </motion.div>
           </AnimatePresence>

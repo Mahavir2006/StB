@@ -6,7 +6,7 @@ const bentoItems = [
   { i: 'story',    title: 'Our Story',     desc: 'A handwritten letter',     span: 'md:row-span-2' },
   { i: 'places',   title: 'Places',        desc: "Where we've been",         span: '' },
   { i: 'stats',    title: 'Wrapped',       desc: 'Our stats this year',      span: 'md:col-span-2' },
-  { i: 'playlist', title: 'Playlist',      desc: 'Our songs',                span: '' },
+  { i: 'gallery',  title: 'The Gallery',   desc: 'A private exhibition',     span: '' },
   { i: 'reasons',  title: 'Reasons',       desc: 'Why I love you',           span: '' },
   { i: 'wishes',   title: 'Friends Wall',  desc: 'Wishes from friends',      span: 'md:col-span-2' },
   { i: 'finale',   title: 'Grand Finale',  desc: 'The big moment',           span: '' },
