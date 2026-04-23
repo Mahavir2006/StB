@@ -13,6 +13,7 @@ const TypewriterLetter = lazy(() => import('../modules/letter/TypewriterLetter')
 const WrappedStats     = lazy(() => import('../modules/wrapped/WrappedStats').then(m => ({ default: m.WrappedStats })));
 const InfiniteReasons  = lazy(() => import('../modules/reasons/InfiniteReasons').then(m => ({ default: m.InfiniteReasons })));
 const ArtGallery       = lazy(() => import('../modules/gallery/ArtGallery').then(m => ({ default: m.ArtGallery })));
+const MixYourColours   = lazy(() => import('../modules/colours/MixYourColours').then(m => ({ default: m.MixYourColours })));
 const WishWall         = lazy(() => import('../modules/wishes/WishWall').then(m => ({ default: m.WishWall })));
 const GlobeScene       = lazy(() => import('../modules/globe/GlobeScene').then(m => ({ default: m.GlobeScene })));
 const FinaleScene      = lazy(() => import('../modules/finale/FinaleScene').then(m => ({ default: m.FinaleScene })));
@@ -101,6 +102,7 @@ export function Dashboard() {
                 {activeTab === 'stats'    && <WrappedStats />}
                 {activeTab === 'reasons'  && <InfiniteReasons />}
                 {activeTab === 'gallery'  && <ArtGallery />}
+                {activeTab === 'colours'  && <MixYourColours />}
                 {activeTab === 'wishes'   && <WishWall />}
                 {activeTab === 'places'   && <GlobeScene />}
                 {activeTab === 'finale'   && <FinaleScene />}

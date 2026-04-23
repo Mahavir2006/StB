@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Home, Film, HelpCircle, BookHeart, BarChart2, Globe, Palette, Heart, Users, Sparkles } from 'lucide-react';
+import { Home, Film, HelpCircle, BookHeart, BarChart2, Globe, Palette, Heart, Users, Sparkles, Droplets } from 'lucide-react';
 import clsx from 'clsx';
 
 const NAV_ITEMS = [
@@ -9,7 +9,8 @@ const NAV_ITEMS = [
   { id: 'story',    label: 'Our Story',     icon: <BookHeart size={18} /> },
   { id: 'stats',    label: 'Wrapped Stats', icon: <BarChart2 size={18} /> },
   { id: 'places',   label: 'Places',        icon: <Globe size={18} /> },
-  { id: 'gallery',  label: 'The Gallery',  icon: <Palette size={18} /> },
+  { id: 'gallery',  label: 'The Gallery',      icon: <Palette size={18} /> },
+  { id: 'colours',  label: 'Mix Your Colours', icon: <Droplets size={18} /> },
   { id: 'reasons',  label: 'Reasons',       icon: <Heart size={18} /> },
   { id: 'wishes',   label: 'Friends Wall',  icon: <Users size={18} /> },
   { id: 'finale',   label: 'Finale',        icon: <Sparkles size={18} /> },
