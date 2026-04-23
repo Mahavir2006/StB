@@ -21,15 +21,30 @@ const COLORS = [
 ];
 
 const SEED_WISHES: Wish[] = [
-  { id: 'seed1', name: 'Your Best Friend', message: "Happy Birthday Stuti! You are the most chaotic, wonderful person I know. Here's to another year of your terrible decisions and amazing energy!", color: COLORS[0], rotation: -2, timestamp: Date.now() - 5000 },
-  { id: 'seed2', name: 'The Squad', message: 'We love you so much! May your birthday be as extra as you are.', color: COLORS[1], rotation: 1.5, timestamp: Date.now() - 4000 },
-  { id: 'seed3', name: 'A Secret Admirer', message: 'You make every room brighter just by walking in. Happy Birthday!', color: COLORS[2], rotation: -1, timestamp: Date.now() - 3000 },
+  { id: 'seed1', name: 'Jash',                  message: "I don't know you as a person but jitna suna hai you seem to be a pure soul. Happy Birthday Stuti.",                                                                                                                                    color: COLORS[0], rotation: -2,   timestamp: Date.now() - 9000 },
+  { id: 'seed2', name: 'Aryamman',              message: "Happy Birthday Stuti, bass that's it I mean haa tu saari insaan che. Happy Birthday.",                                                                                                                                                  color: COLORS[1], rotation: 1.5,  timestamp: Date.now() - 8000 },
+  { id: 'seed3', name: 'Rishiraj',              message: "Happy Birthday, you are seriously a very good person bass wo gandu ko thoda kam call kar when he's with us dhyaan ajj nathi hotu enu kyaare pan jyaare taaro call aave.",                                                              color: COLORS[2], rotation: -1.5, timestamp: Date.now() - 7000 },
+  { id: 'seed4', name: 'Rishi',                 message: "Happy Birthday Stuti. Keep growing, keep enjoying and start partying. Ola b#!d^a ni gaand maarti rehje warna E sudharse nai.",                                                                                                         color: COLORS[3], rotation: 2,    timestamp: Date.now() - 6000 },
+  { id: 'seed5', name: 'Swayam',                message: "Happy Birthday Stuti.",                                                                                                                                                                                                                 color: COLORS[4], rotation: -0.5, timestamp: Date.now() - 5000 },
+  { id: 'seed6', name: 'Falguni (Mari mummy)',  message: "Happy Birthday beta. I hope you do well with your career and at the same time grow mentally. Parents nu dhyaan raakhje and jaldi ghare madva aavje. Sending you lots of love and chocolates.",                                          color: COLORS[0], rotation: 1,    timestamp: Date.now() - 4000 },
+  { id: 'seed7', name: 'Dada',                  message: "Aa gadhedo taara karan A khush rehva laagyo che to ena maate thank you, keep learning in life. Happy Birthday beta.",                                                                                                                   color: COLORS[1], rotation: -2.5, timestamp: Date.now() - 3000 },
+  { id: 'seed8', name: 'Heet',                  message: "Happy Birthday Stuti from me and Hiya wishing you the best birthday ahead. Take care and stay healthy.",                                                                                                                               color: COLORS[2], rotation: 1.8,  timestamp: Date.now() - 2000 },
+  { id: 'seed9', name: 'Mahavir',               message: "I have always loved you and will keep loving you until the very end, your place, your position and your care will never ever be affected even 1% in my life. Happy Birthday Stuti, loads of love.",                                    color: COLORS[3], rotation: -1,   timestamp: Date.now() - 1000 },
 ];
 
 function getStoredWishes(): Wish[] {
   try {
     const stored = localStorage.getItem('stuti-wishes');
-    return stored ? JSON.parse(stored) as Wish[] : SEED_WISHES;
+    if (stored) {
+      const parsed = JSON.parse(stored) as Wish[];
+      // If stored wishes are the old seed data (≤3 items), replace with new ones
+      if (parsed.length <= 3 && parsed.every(w => w.id.startsWith('seed'))) {
+        localStorage.removeItem('stuti-wishes');
+        return SEED_WISHES;
+      }
+      return parsed;
+    }
+    return SEED_WISHES;
   } catch {
     return SEED_WISHES;
   }
