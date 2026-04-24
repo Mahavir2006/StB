@@ -43,6 +43,208 @@ interface BlobState {
 
 interface Secret { a: string; b: string; message: string; color: string }
 
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*  THE ULTIMATE CONFESSION                                                     */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+const MOMENTS = [
+  'When I was at Kedarnath',
+  'When I was at Badrinath',
+  'When I spotted the leopard family',
+  'When I faced death multiple times',
+  'When things were seriously terrible',
+  'When things went all well',
+  'In my best days',
+  'In my not so good days',
+];
+
+const TEMPLES = [
+  'Kedarnath', 'Badrinath', 'Triyambakeshwar',
+  'Ujjain', 'Sarangpur', 'Gondal',
+  'Ahmedabad', 'Mumbai', 'Gadhda',
+];
+
+const CONFESSION_PARAS = [
+  "How much do you matter to me? Well, there would have been a parameter to measure how much you matter to me — the scale for measurement would easily break.",
+  "I thought about Stuti when...",
+  "Where did I pray for you? Every temple I went to...",
+  "Every temple I visited still echoes with the prayers of your name. And I feel that is why I found you — that is why I found my Stuti. Despite having 4–5 reasons to doubt upon us, I have infinite reasons to be sure about us. I would always be grateful to two people: one is me, for being here and for the first time in my life stretching, waiting and cherishing every phase. Obviously the second is you — for being there. In my highs and especially in my lows, where I never honestly needed someone, but now it feels as if whenever something terribly wrong happens, it is me who always feels like — rukk, Stuti ne kau.",
+  "Thank you for making your importance in my life.",
+  "You will always be the person I cherish the most. Always the person whose care would matter to me the most. Because Stuti, it is you who is the person.",
+  "Until the very end, Happy Birthday My Love.",
+];
+
+function TheUltimateConfession() {
+  const [revealed, setRevealed] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setRevealed(true); },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <motion.div
+      ref={sectionRef}
+      initial={{ opacity: 0 }}
+      animate={revealed ? { opacity: 1 } : {}}
+      transition={{ duration: 1 }}
+      className="relative w-full"
+    >
+      {/* Divider */}
+      <div className="flex items-center gap-6 mb-12">
+        <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, transparent, var(--border-color))' }} />
+        <p className="font-emotional italic text-[var(--text-secondary)] text-sm whitespace-nowrap tracking-wide">
+          The Ultimate Confession
+        </p>
+        <div className="flex-1 h-px" style={{ background: 'linear-gradient(to left, transparent, var(--border-color))' }} />
+      </div>
+
+      {/* Letter card */}
+      <div
+        className="relative rounded-3xl overflow-hidden"
+        style={{
+          background: 'linear-gradient(160deg, #FFF0BE 0%, #FFD6A6 50%, #FFB399 100%)',
+          border: '1px solid rgba(45,18,0,0.12)',
+          boxShadow: '0 12px 60px rgba(45,18,0,0.15), inset 0 0 80px rgba(255,240,190,0.5)',
+        }}
+      >
+        {/* Linen texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{
+          backgroundImage: 'repeating-linear-gradient(0deg,rgba(45,18,0,1) 0,transparent 1px,transparent 6px),repeating-linear-gradient(90deg,rgba(45,18,0,1) 0,transparent 1px,transparent 6px)',
+          backgroundSize: '7px 7px',
+        }} />
+
+        {/* Ruled lines */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'repeating-linear-gradient(transparent, transparent 39px, rgba(45,18,0,0.08) 39px, rgba(45,18,0,0.08) 40px)',
+          backgroundSize: '100% 40px',
+          backgroundPositionY: '60px',
+        }} />
+
+        <div className="relative z-10 px-8 md:px-16 py-12 md:py-16 flex flex-col gap-8">
+
+          {/* Opening */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={revealed ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="font-emotional italic text-2xl md:text-3xl leading-relaxed"
+            style={{ color: '#2D1200' }}
+          >
+            {CONFESSION_PARAS[0]}
+          </motion.p>
+
+          {/* I thought about Stuti when... */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={revealed ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="flex flex-col gap-3"
+          >
+            <p className="font-emotional italic text-xl" style={{ color: '#7A3D1A' }}>
+              {CONFESSION_PARAS[1]}
+            </p>
+            <div className="flex flex-col gap-2 pl-6 border-l-2" style={{ borderColor: '#c0392b' }}>
+              {MOMENTS.map((m, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={revealed ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.8 + i * 0.12, duration: 0.5 }}
+                  className="font-emotional italic text-lg"
+                  style={{ color: '#2D1200' }}
+                >
+                  {m}
+                </motion.p>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Temples */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={revealed ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 1.9, duration: 0.8 }}
+            className="flex flex-col gap-3"
+          >
+            <p className="font-emotional italic text-xl" style={{ color: '#7A3D1A' }}>
+              {CONFESSION_PARAS[2]}
+            </p>
+            <div className="flex flex-wrap gap-2 pl-2">
+              {TEMPLES.map((t, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={revealed ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: 2.1 + i * 0.09, duration: 0.4 }}
+                  className="px-3 py-1 rounded-full text-sm font-medium font-ui"
+                  style={{
+                    background: 'rgba(192,57,43,0.12)',
+                    border: '1px solid rgba(192,57,43,0.3)',
+                    color: '#c0392b',
+                  }}
+                >
+                  {t}
+                </motion.span>
+              ))}
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={revealed ? { opacity: 1 } : {}}
+                transition={{ delay: 3.0, duration: 0.6 }}
+                className="font-emotional italic text-lg self-center"
+                style={{ color: '#7A3D1A' }}
+              >
+                ...and every temple in between.
+              </motion.span>
+            </div>
+          </motion.div>
+
+          {/* Main body */}
+          {[CONFESSION_PARAS[3], CONFESSION_PARAS[4], CONFESSION_PARAS[5]].map((para, i) => (
+            <motion.p
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              animate={revealed ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 3.2 + i * 0.5, duration: 0.8 }}
+              className="font-emotional italic leading-loose"
+              style={{ color: '#2D1200', fontSize: i === 2 ? '1.1rem' : '1.2rem' }}
+            >
+              {para}
+            </motion.p>
+          ))}
+
+          {/* Closing */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={revealed ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 4.8, duration: 1 }}
+            className="pt-6 border-t"
+            style={{ borderColor: 'rgba(45,18,0,0.12)' }}
+          >
+            <p
+              className="font-emotional italic text-3xl md:text-4xl font-bold text-right"
+              style={{ color: '#c0392b', textShadow: '0 2px 20px rgba(192,57,43,0.2)' }}
+            >
+              {CONFESSION_PARAS[6]}
+            </p>
+            <p className="font-emotional italic text-right mt-2 text-lg" style={{ color: '#7A3D1A' }}>
+              — Mahavir
+            </p>
+          </motion.div>
+
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 /* ─── Main component ─── */
 export function MixYourColours() {
   const canvasRef   = useRef<HTMLCanvasElement>(null);
@@ -382,6 +584,10 @@ export function MixYourColours() {
           </div>
         </div>
       )}
+
+      {/* ── The Ultimate Confession ── */}
+      <TheUltimateConfession />
+
     </div>
   );
 }
