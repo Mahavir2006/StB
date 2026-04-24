@@ -8,12 +8,12 @@ const QUESTIONS = [
   { q: "Which South Indian film would she rewatch forever?", options: ["Sita Ramam", "Baahubali", "RRR", "K.G.F"], correct: 0 },
   { q: "Stuti's signature reaction to something genuinely surprising?", options: ["Silence", "Loud gasp", "Laughing uncontrollably", "Eye roll"], correct: 1 },
   { q: "If she were a film genre, she'd be...?", options: ["Rom-Com", "Psychological Thriller", "Action", "Documentary"], correct: 0 },
-  { q: "What does she do first thing every morning?", options: ["Check phone", "Drink water", "Hit snooze 5 times", "Make tea"], correct: 2 },
-  { q: "Her most used phrase that could be a movie title?", options: ["I have a plan", "Wait, hear me out", "Whatever.", "Let's go!"], correct: 1 },
-  { q: "The one song she knows every single word to?", options: ["Blank Space", "Bohemian Rhapsody", "Tum Hi Ho", "Despacito"], correct: 0 },
-  { q: "Her most chaotic decision?", options: ["Dyeing hair at 3am", "Booking a random flight", "Eating spicy food when sick", "None of the above"], correct: 0 },
-  { q: "In a South Indian film, her role would be...?", options: ["The dramatic villain", "The innocent heroine", "The chaotic best friend", "The wise narrator"], correct: 2 },
-  { q: "What makes Stuti laugh until she cries?", options: ["Bad puns", "Inside jokes", "People tripping", "Memes"], correct: 1 },
+  { q: "What would Stuti do if someone has done bad to her?", options: ["Confront", "Revenge", "Spread hate about that person", "Forgive the person"], correct: 3 },
+  { q: "What would Stuti prefer?", options: ["Chaotic Bowling", "Partying", "Beach walks", "Evil Gossips"], correct: 2 },
+  { q: "Who would Stuti pick to ragebait until the person cries off?", options: ["Mahfrin", "Mahavir", "Arti", "Sakshi"], correct: 1 },
+  { q: "Never have you ever......", options: ["Cried over your result", "Excite over small things", "Snitched from your parents", "Scored good marks"], correct: 2 },
+  { q: "The dumbest person Stuti has ever met in her life.", options: ["Mahavir", "Rupesh", "Mahfrin", "Radhika"], correct: 1 },
+  { q: "Who would you pick as your current closest person?", options: ["Mahavir", "Mahfrin", "Radhika", "Sakshi"], correct: [0, 1] },
 ];
 
 export function QuizEngine() {
@@ -45,8 +45,11 @@ export function QuizEngine() {
   const handleSelect = (idx: number) => {
     if (selectedOpt !== null) return;
     setSelectedOpt(idx);
-    
-    if (idx === QUESTIONS[currentIdx].correct) {
+
+    const correctVal = QUESTIONS[currentIdx].correct;
+    const isCorrect = Array.isArray(correctVal) ? correctVal.includes(idx) : idx === correctVal;
+
+    if (isCorrect) {
       setScore(s => s + 1);
       gsap.fromTo('.score-hud', { scale: 1.5, color: '#4ade80' }, { scale: 1, color: '', duration: 0.5 });
       // Play ding sound placeholder
@@ -138,9 +141,11 @@ export function QuizEngine() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {q.options.map((opt, i) => {
+            const correctVal = q.correct;
+            const isCorrect = Array.isArray(correctVal) ? correctVal.includes(i) : i === correctVal;
             let stateClass = "border-[var(--border-color)] hover:border-[var(--color-accent-purple-start)]/50";
             if (selectedOpt !== null) {
-              if (i === q.correct) stateClass = "bg-green-500/20 border-green-500 text-green-400";
+              if (isCorrect) stateClass = "bg-green-500/20 border-green-500 text-green-400";
               else if (i === selectedOpt) stateClass = "bg-red-500/20 border-red-500 text-red-400";
               else stateClass = "opacity-50 border-[var(--border-color)]";
             }
