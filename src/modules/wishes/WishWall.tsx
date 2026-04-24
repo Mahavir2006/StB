@@ -38,8 +38,9 @@ function getStoredWishes(): Wish[] {
     const stored = localStorage.getItem('stuti-wishes');
     if (stored) {
       const parsed = JSON.parse(stored) as Wish[];
-      // If stored wishes are the old seed data (≤3 items), replace with new ones
-      if (parsed.length <= 3 && parsed.every(w => w.id.startsWith('seed'))) {
+      // If stored wishes are all seed entries (no user-submitted wishes), always refresh with latest seeds
+      const hasUserWishes = parsed.some(w => !w.id.startsWith('seed'));
+      if (!hasUserWishes) {
         localStorage.removeItem('stuti-wishes');
         return SEED_WISHES;
       }
